@@ -6,10 +6,8 @@ using Microsoft.Win32;
 
 namespace ProxyToggle
 {
-
     class Program
     {
-
         [DllImport("wininet.dll")]
         public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
         public const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
@@ -19,10 +17,8 @@ namespace ProxyToggle
         private const string subkey = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
         private const string keyName = userRoot + "\\" + subkey;
 
-
         static void setProxy(string proxyhost, bool proxyEnabled)
         {
-
             Registry.SetValue(keyName, "ProxyServer", proxyhost);
             Registry.SetValue(keyName, "ProxyOverride", "<local>");
             Registry.SetValue(keyName, "ProxyEnable", proxyEnabled ? 1 : 0);
