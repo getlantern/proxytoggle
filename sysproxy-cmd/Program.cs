@@ -15,21 +15,20 @@ namespace ProxyToggle
         public const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
         public const int INTERNET_OPTION_REFRESH = 37;
 
+        private const string userRoot = "HKEY_CURRENT_USER";
+        private const string subkey = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
+        private const string keyName = userRoot + "\\" + subkey;
+
 
         static void setProxy(string proxyhost, bool proxyEnabled)
         {
-            const string userRoot = "HKEY_CURRENT_USER";
-            const string subkey = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
-            const string keyName = userRoot + "\\" + subkey;
 
             Registry.SetValue(keyName, "ProxyServer", proxyhost);
             Registry.SetValue(keyName, "ProxyOverride", "<local>");
-            Console.Error.WriteLine("ProxyServer set to '{0}'", proxyhost);
             Registry.SetValue(keyName, "ProxyEnable", proxyEnabled ? 1 : 0);
-            Console.Error.WriteLine("ProxyEnable set to '{0}'", proxyEnabled ? 1 : 0);
 
             // These lines implement the Interface in the beginning of program 
-            // They cause the OS to refresh the settings, causing IP to realy update
+            // They cause the OS to refresh the settings, causing the IP to realy update
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
         }
@@ -38,11 +37,21 @@ namespace ProxyToggle
         {
             if (args.Length == 0)
             {
-                setProxy("", false);
-                return;
+                Console.Error.WriteLine("Usage: on/off host port or show");
             }
-
-            setProxy(args[0], true);
+            else if (args[0] == "off")
+            {
+                setProxy("", false);
+            }
+            else if (args[0] == "on")
+            {
+                setProxy(args[1]+":"+args[2], true);
+            }
+            else if (args[0] == "show")
+            {
+                string proxyServer = (string)Registry.GetValue(keyName, "ProxyServer", "");
+                Console.WriteLine(proxyServer);
+            }
         }
     }
 }
