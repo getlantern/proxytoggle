@@ -29,6 +29,11 @@ namespace ProxyToggle
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
         }
 
+        static string getProxy()
+        {
+            return (string)Registry.GetValue(keyName, "ProxyServer", "");
+        }
+
         static void Main(string[] args)
         {
             if (args.Length == 0)
@@ -37,7 +42,11 @@ namespace ProxyToggle
             }
             else if (args[0] == "off")
             {
-                setProxy("", false);
+                string proxy = args[1] + ":" + args[2];
+                if (proxy == getProxy())
+                {
+                    setProxy("", false);
+                }
             }
             else if (args[0] == "on")
             {
@@ -45,8 +54,7 @@ namespace ProxyToggle
             }
             else if (args[0] == "show")
             {
-                string proxyServer = (string)Registry.GetValue(keyName, "ProxyServer", "");
-                Console.WriteLine(proxyServer);
+                Console.WriteLine(getProxy());
             }
         }
     }

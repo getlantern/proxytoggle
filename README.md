@@ -5,14 +5,14 @@ Allows you to activate / deactivate system wide proxy configuration for windows 
 # Usage (cli)
 
 ## disable current proxy
-```R:\> proxytoggle.exe off ```
+```R:\> proxytoggle.exe off http=127.0.0.1 8080```
 
 ## Activate http proxy
-```R:\> proxytoggle.exe on http=127.0.0.1:8080```
+```R:\> proxytoggle.exe on http=127.0.0.1 8080```
 
 
 ## Activate socks proxy
-```R:\> proxytoggle.exe on socks=127.0.0.1:8080```
+```R:\> proxytoggle.exe on socks=127.0.0.1 8080```
 
 ## Show existing proxy settings
 ```R:\> proxytoggle.exe show``` 
